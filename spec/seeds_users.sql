@@ -4,4 +4,4 @@ TRUNCATE TABLE users, posts RESTART IDENTITY; -- replace with your own table nam
 INSERT INTO users (email, username) VALUES ('edward@makers.com', 'Edward');
 INSERT INTO users (email, username) VALUES ('luke@makers.com', 'Luke');
 INSERT INTO users (email, username) VALUES ('cassius@makers.com', 'Cassius');
-INSERT INTO posts (content, views, user_id) VALUES ('Hello world', 2000, 1)
+INSERT INTO posts (content, views, user_id) VALUES ('Hello world', 2000, 2)

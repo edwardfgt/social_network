@@ -42,6 +42,13 @@ describe UserRepository do
         username: "Paul"
       )
     )
+  end
 
+  it "deletes a specified user from the database" do
+    repo = UserRepository.new
+    repo.delete(1)
+    all_users = repo.all
+    expect(all_users.first.id).to eq "2"
+    expect(all_users.size).to eq 2
   end
 end
