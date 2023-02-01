@@ -28,4 +28,20 @@ describe UserRepository do
     expect(user.username).to eq "Edward" 
     expect(user.email).to eq "edward@makers.com" 
   end
+
+  it "creates a new user in the database based on user input" do
+    repo = UserRepository.new
+    user = User.new
+    user.email = "paul@gmail.com"
+    user.username = "Paul"
+    repo.create(user)
+    all_users = repo.all
+    expect(all_users).to include(
+      have_attributes(
+        email: "paul@gmail.com",
+        username: "Paul"
+      )
+    )
+
+  end
 end
