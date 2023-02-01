@@ -9,10 +9,28 @@ _Copy this recipe template to design and create two related database tables from
 # (analyse only the relevant part - here the final line).
 
 ```
+As a social network user,
+So I can have my information registered,
+I'd like to have a user account with my email address.
 
+As a social network user,
+So I can have my information registered,
+I'd like to have a user account with my username.
+
+As a social network user,
+So I can write on my timeline,
+I'd like to create posts associated with my user account.
+
+As a social network user,
+So I can write on my timeline,
+I'd like each of my posts to have a title and a content.
+
+As a social network user,
+So I can know who reads my posts,
+I'd like each of my posts to have a number of views.
 ```
 Nouns:
-album, title, release year, artist, name
+user, email address, username, posts, content, views
 ```
 
 ## 2. Infer the Table Name and Columns
@@ -21,16 +39,16 @@ Put the different nouns in this table. Replace the example with your own nouns.
 
 | Record                | Properties          |
 | --------------------- | ------------------  |
-| album                 | title, release year
-| artist                | name
+| user                 | id, email address, username
+| post                 | id, content, views, user_id(fk)
 
-1. Name of the first table (always plural): `albums` 
+1. Name of the first table (always plural): `users` 
 
-    Column names: `title`, `release_year`
+    Column names: `id`, `email address`, `username`
 
-2. Name of the second table (always plural): `artists` 
+2. Name of the second table (always plural): `posts` 
 
-    Column names: `name`
+    Column names: `id`, `content`, `views`, `user_id`
 
 ## 3. Decide the column types.
 
@@ -42,13 +60,16 @@ Remember to **always** have the primary key `id` as a first column. Its type wil
 
 ```
 # EXAMPLE:
-Table: albums
+Table: users
 id: SERIAL
-title: text
-release_year: int
-Table: artists
+email_address: text
+username: text
+
+Table: posts
 id: SERIAL
-name: text
+content: text
+views: INT
+user_id: INT (FK)
 ```
 
 ## 4. Decide on The Tables Relationship
@@ -57,49 +78,60 @@ Most of the time, you'll be using a **one-to-many** relationship, and will need 
 
 To decide on which one, answer these two questions:
 
-1. Can one [TABLE ONE] have many [TABLE TWO]? (Yes/No)
-2. Can one [TABLE TWO] have many [TABLE ONE]? (Yes/No)
+1. Can one [TABLE ONE] have many [TABLE TWO]? Yes
+2. Can one [TABLE TWO] have many [TABLE ONE]? No
 
 You'll then be able to say that:
 
-1. **[A] has many [B]**
-2. And on the other side, **[B] belongs to [A]**
-3. In that case, the foreign key is in the table [B]
+1. **users has many posts**
+2. And on the other side, **posts belongs to users**
+3. In that case, the foreign key is in the table user_id
 
 Replace the relevant bits in this example with your own:
 
 ```
 # EXAMPLE
-1. Can one artist have many albums? YES
-2. Can one album have many artists? NO
+1. Can one user have many posts? YES
+2. Can one post have many users ? NO
 -> Therefore,
--> An artist HAS MANY albums
--> An album BELONGS TO an artist
--> Therefore, the foreign key is on the albums table.
+-> A user HAS MANY posts
+-> A post BELONGS TO a user
+-> Therefore, the foreign key is on the post table.
 ```
 
 *If you can answer YES to the two questions, you'll probably have to implement a Many-to-Many relationship, which is more complex and needs a third table (called a join table).*
 
 ## 4. Write the SQL.
+Table: users
+id: SERIAL
+email_address: text
+username: text
+
+Table: posts
+id: SERIAL
+content: text
+views: INT
+user_id: INT (FK)
 
 ```sql
 -- EXAMPLE
 -- file: albums_table.sql
 -- Replace the table name, columm names and types.
 -- Create the table without the foreign key first.
-CREATE TABLE artists (
+CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name text,
+  email text,
+  username text
 );
 -- Then the table with the foreign key first.
-CREATE TABLE albums (
+CREATE TABLE posts (
   id SERIAL PRIMARY KEY,
-  title text,
-  release_year int,
+  content text,
+  views int,
 -- The foreign key name is always {other_table_singular}_id
-  artist_id int,
-  constraint fk_artist foreign key(artist_id)
-    references artists(id)
+  user_id int,
+  constraint fk_user foreign key(user_id)
+    references users(id)
     on delete cascade
 );
 ```

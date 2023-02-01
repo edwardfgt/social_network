@@ -30,11 +30,11 @@ If seed data is provided (or you already created it), you can skip this step.
 -- First, you'd need to truncate the table - this is so our table is emptied between each test run,
 -- so we can start with a fresh state.
 -- (RESTART IDENTITY resets the primary key)
-TRUNCATE TABLE students RESTART IDENTITY; -- replace with your own table name.
+TRUNCATE TABLE users RESTART IDENTITY; -- replace with your own table name.
 -- Below this line there should only be `INSERT` statements.
 -- Replace these statements with your own seed data.
-INSERT INTO students (name, cohort_name) VALUES ('David', 'April 2022');
-INSERT INTO students (name, cohort_name) VALUES ('Anna', 'May 2022');
+INSERT INTO users (email, username) VALUES ('edward@makers.com', 'edward');
+INSERT INTO users (email, username) VALUES ('luke@makers.com', 'Luke');
 ```
 
 Run this SQL file on the database to truncate (empty) the table, and insert the seed data. Be mindful of the fact any existing records in the table will be deleted.
@@ -51,12 +51,12 @@ Usually, the Model class name will be the capitalised table name (single instead
 # EXAMPLE
 # Table name: students
 # Model class
-# (in lib/student.rb)
-class Student
+# (in lib/user.rb)
+class User
 end
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/user_repository.rb)
+class UserRepository
 end
 ```
 
@@ -68,18 +68,15 @@ Define the attributes of your Model class. You can usually map the table columns
 # EXAMPLE
 # Table name: students
 # Model class
-# (in lib/student.rb)
-class Student
+# (in lib/user.rb)
+class User
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :cohort_name
+  attr_accessor :id, :email, :username
 end
 # The keyword attr_accessor is a special Ruby feature
 # which allows us to set and get attributes on an object,
 # here's an example:
-#
-# student = Student.new
-# student.name = 'Jo'
-# student.name
+
 ```
 
 *You may choose to test-drive this class, but unless it contains any more logic than the example above, it is probably not needed.*
@@ -94,8 +91,8 @@ Using comments, define the method signatures (arguments and return value) and wh
 # EXAMPLE
 # Table name: students
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/user_repository.rb)
+class UserRepository
   # Selecting all records
   # No arguments
   def all
@@ -111,12 +108,12 @@ class StudentRepository
     # Returns a single Student object.
   end
   # Add more methods below for each operation you'd like to implement.
-  # def create(student)
-  # end
-  # def update(student)
-  # end
-  # def delete(student)
-  # end
+  def create(student)
+  end
+  def update(student)
+  end
+  def delete(student)
+  end
 end
 ```
 
@@ -130,22 +127,22 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 # 1
 # Get all students
-repo = StudentRepository.new
-students = repo.all
-students.length # =>  2
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
+repo = UserRepository.new
+Users = repo.all
+user.length # =>  3
+user[0].id # => 1  
+user[0].username # =>  'Edward'
+user[0].email # =>  'edward@makers.com'
+user[1].id # =>  2
+user[1].username # =>  'Luke'
+user[1].email # =>  'luke@makers.com'
 # 2
 # Get a single student
-repo = StudentRepository.new
-student = repo.find(1)
-student.id # =>  1
-student.name # =>  'David'
-student.cohort_name # =>  'April 2022'
+repo = UserRepository.new
+user = repo.find(1)
+user.id # =>  1
+user.username # =>  'Edward'
+user.email # =>  'edward@makers.com'
 # Add more examples for each method
 ```
 
